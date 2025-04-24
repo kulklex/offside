@@ -1,7 +1,6 @@
 fastapi==0.115.12
 uvicorn==0.34.2
 opencv-python==4.10.0.84
-opencv-python-headless==4.10.0.84
 yolov5==7.0.14
 pillow==11.1.0
 numpy==1.26.4
