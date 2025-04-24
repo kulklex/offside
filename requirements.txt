@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+pandas
+opencv-python-headless
+numpy
+Pillow
+torch
+yolov5 @ git+https://github.com/ultralytics/yolov5.git
