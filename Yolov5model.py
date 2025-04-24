@@ -1,28 +1,52 @@
 import yolov5 # using a yolo model
 import cv2 #for image processing
 import numpy as np
+from pathlib import Path
+import os
+
 
 # Load the pre-trained football model
-model = yolov5.load('keremberke/yolov5n-football')
+model = yolov5.load('keremberke/yolov5m-football')
 
 # Set model parameters
 model.conf = 0.25
 model.iou = 0.45
+model.multi_label = True
 
-# Specify the input image
-image_path = 'images/pedri.jpg'
+input_folder = Path('images/')
+output_folder = Path('results/')
 
-# Load the image using OpenCV
-image = cv2.imread(image_path)
-image = np.array(image, copy=True)  # Ensure the array is writable because when an image is loaded via OpenCV, it becomes a NumPy array, have to ensure is writable for detection.
+image_extensions = ['*.jpg', '*.jpeg', '*.png', '*.bmp', '*.tiff', 'webp', 'avif']
 
-# Perform object detection
-results = model(image)
+for extensions in image_extensions:
+    for image_path in input_folder.glob(extensions): 
+        print(f"Processing {image_path.name}...")
 
-# Display detected objects
-print(results.pandas().xyxy[0])
+        # Loading the image using OpenCV
+        image = cv2.imread(str(image_path))
+        image = np.array(image, copy=True) 
 
-# Save results to the 'results/' f
-results.save(save_dir='results/')
+        # Object detection
+        results = model(image)
 
-print("Annotated image saved successfully!")
+        results.render()
+        
+        save_path = output_folder / image_path.name
+        
+        # Check if a file with the same name already exists
+        if save_path.exists():
+            # Add a unique suffix to avoid overwriting (e.g., image1.jpg -> image1_1.jpg)
+            base_name = save_path.stem 
+            ext = save_path.suffix
+            counter = 1
+            while (output_folder / f"{base_name}_{counter}{ext}").exists():
+                counter += 1
+            save_path = output_folder / f"{base_name}_{counter}{ext}"
+            
+        
+        cv2.imwrite(str(save_path), results.ims[0])
+
+
+        print(results.pandas().xyxy[0])  # Bounding box, class, and confidence data
+
+print("Images saved successfully!")
