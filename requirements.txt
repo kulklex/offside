@@ -1,9 +1,7 @@
 fastapi==0.115.12
 uvicorn==0.34.2
-torch==2.6.0
+opencv-python==4.10.0.84
 opencv-python-headless==4.10.0.84
-pandas==2.2.3
-scipy==1.15.1
-seaborn==0.13.2
-pytz==2025.1
-requests==2.32.3
+yolov5==7.0.14
+pillow==11.1.0
+numpy==1.26.4
